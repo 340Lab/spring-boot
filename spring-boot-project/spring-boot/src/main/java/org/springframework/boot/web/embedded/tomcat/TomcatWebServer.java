@@ -46,6 +46,9 @@ import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.server.WebServerException;
 import org.springframework.util.Assert;
 
+import org.crac.Core;
+import org.crac.Resource;
+
 /**
  * {@link WebServer} that can be used to control a Tomcat web server. Usually this class
  * should be created using the {@link TomcatReactiveWebServerFactory} or
@@ -55,7 +58,7 @@ import org.springframework.util.Assert;
  * @author Kristine Jetzke
  * @since 2.0.0
  */
-public class TomcatWebServer implements WebServer {
+public class TomcatWebServer implements WebServer, Resource {
 
 	private static final Log logger = LogFactory.getLog(TomcatWebServer.class);
 
@@ -429,6 +432,17 @@ public class TomcatWebServer implements WebServer {
 			return;
 		}
 		this.gracefulShutdown.shutDownGracefully(callback);
+	}
+
+	@Override
+	public void beforeCheckpoint(org.crac.Context<? extends Resource> context) throws Exception {
+		System.out.println("beforeCheckpoint spring tomcat");
+		// CloseFD.closeAll();
+	}
+
+	@Override
+	public void afterRestore(org.crac.Context<? extends Resource> context) throws Exception {
+		System.out.println("afterRestore spring tomcat");
 	}
 
 }
